@@ -25,26 +25,45 @@ public class Voter extends Thread{
             times = 4;
         } else times = 6;
 
-        if (threadName.equals("Bob")) {
-            try {
-                sem1.acquire();
-                sleep(100);
-                sem2.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                sem2.acquire();
-                sleep(100);
-                sem1.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
+while(true) {
+    if (threadName.equals("Bob")) {
         try {
             sem1.acquire();
+            sleep(100);
+
+            if (sem2.tryAcquire()) {
+                vote();
+                break;
+            } else {
+                sem1.release();
+                System.out.println("Bob : sem2 not acquired, sem1 released");
+                sleep((int) (10 + Math.random() * 100));
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    } else {
+        try {
+            sem2.acquire();
+            sleep(100);
+
+            if (sem1.tryAcquire()) {
+                vote();
+                break;
+            } else {
+                sem2.release();
+                System.out.println("Alice : sem1 not acquired, sem2 released");
+                sleep((int) (10 + Math.random() * 500));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+//        try {
             int pensLeft = pen.getNumberOfPens();
             for (int i = 0; i < times; i++) {
                 try {
@@ -55,18 +74,18 @@ public class Voter extends Thread{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                vote();
                 pensLeft--;
             }
             pen.setNumberOfPens(pensLeft);
             System.out.println(threadName + " used pen : " + pen.getNumberOfPens() + " pens left");
 
-        } catch (InterruptedException exc) {
-            System.out.println(exc);
-        }
+//        } catch (InterruptedException exc) {
+//            System.out.println(exc);
+//        }
 
         System.out.println(threadName + ":Released the permit");
         sem1.release();
+        sem2.release();
     }
 
     public void vote() {

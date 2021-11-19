@@ -19,12 +19,11 @@ public class VoteCounter extends Thread {
 
     @Override
     public void run() {
-        String partyName;
         Party party;
-        while (!(paperBallots.size() == 0)) {
-
-            partyName = paperBallots.get((int)(Math.random() * paperBallots.size())).getChosenParty();
-            party = parties.get(partyName);
+        PaperBallot paperBallot;
+        while (!(paperBallots.isEmpty())) {
+            paperBallot = paperBallots.remove((int)(Math.random() * paperBallots.size()));
+            party = parties.get(paperBallot.getChosenParty());
             party.incrementVotes();
         }
     }

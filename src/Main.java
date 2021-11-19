@@ -1,9 +1,12 @@
+import Controller.VoteCounter;
 import Controller.Voter;
 import Model.Booth;
 import Model.PaperBallot;
 import Model.Party;
 import Model.Pen;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class Main {
@@ -17,13 +20,18 @@ public class Main {
         Pen[] pens = new Pen[10];
         Booth[] booths = new Booth[10];
         Voter[] voters = new Voter[1000];
-        Party[] parties = {new Party("Socialdemotrakiet"),
-                new Party("Venstre"),
-                new Party("Fremskridtspartiet"),
-                new Party("Enhedslisten"),
-                new Party("Liberal Alliance")};
+        VoteCounter[] voteCounters = new VoteCounter[10];
+        HashMap<String, Party> parties = null;
 
-        PaperBallot[] paperBallots = new PaperBallot[voters.length];
+        List<PaperBallot> paperBallots = null;
+
+        //create parties and add to hashmap
+        assert false;
+        parties.put("Socialdemokratiet", new Party("Socialdemokratiet"));
+        parties.put("Venstre", new Party("Venstre"));
+        parties.put("Fremskridtspartiet", new Party("Fremskridtspartiet"));
+        parties.put("Enhedslisten", new Party("Enhedslisten"));
+        parties.put("Liberal ALliance", new Party("Liberal ALliance"));
 
         //create pens
         for (int i = 0; i < pens.length; i++) {
@@ -36,20 +44,29 @@ public class Main {
         }
 
         //create paper ballots
-        for (int i = 0; i < paperBallots.length; i++) {
-            paperBallots[i] = new PaperBallot();
+        for (int i = 0; i < paperBallots.size(); i++) {
+            paperBallots.add(new PaperBallot());
         }
 
+        //create voters
         for (int i = 0; i < voters.length; i++) {
-            voters[i] = new Voter("default", i, sem1, sem2, totalScoreSem, paperBallots[i], pens, booths);
+            voters[i] = new Voter("default", i, sem1, sem2, totalScoreSem, paperBallots.get(i), pens, booths);
         }
 
+        //create vote counters
+        for (int i = 0; i < voteCounters.length; i++) {
+            voteCounters[i] = new VoteCounter(paperBallots, parties);
+        }
+
+        //start voters
         for (int i = 0; i < voters.length; i++) {
             voters[i].start();
         }
 
+        //wait for all voters to finish
         for (int i = 0; i < voters.length; i++) {
             voters[i].join();
         }
     }
+
 }

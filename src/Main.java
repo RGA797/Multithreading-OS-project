@@ -4,19 +4,21 @@ public class Main {
 
     public static void main(String args[]) throws InterruptedException {
         //create Semaphore=&amp;amp;gt; #permits = 1
-        Semaphore sem = new Semaphore(1);
-        SharedRes sharedRes = new SharedRes();
+        Semaphore sem1 = new Semaphore(1);
+        Semaphore sem2 = new Semaphore(1);
+        Pens pens = new Pens();
+        Booth booth = new Booth();
+        PaperBallot paperBallot = new PaperBallot();
         // Create thread instances T1 &amp;amp;amp; T2
         //T1=&amp;amp;gt; Increments the count; T2=&amp;amp;gt; Decrements the count
-        ThreadClass thread1 = new ThreadClass(sem, "T1", sharedRes);
-        ThreadClass thread2 = new ThreadClass(sem, "T2", sharedRes);
+        Voter bob = new Voter("Bob", sem1, sem2, paperBallot, pens, booth);
+        Voter alice = new Voter("Alice", sem1, sem2, paperBallot, pens, booth);
 
         // start T1 &amp;amp;amp; T2
-        thread1.start();
-        thread2.start();
+        bob.start();
+        alice.start();
         // Wait T1 &amp;amp;amp; T2
-        thread1.join();
-        thread2.join();
-        System.out.println("count: " + SharedRes.count);    // display final count.
+        bob.join();
+        alice.join();
     }
 }

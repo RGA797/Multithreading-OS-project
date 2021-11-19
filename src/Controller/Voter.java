@@ -1,3 +1,9 @@
+package Controller;
+
+import Model.Booth;
+import Model.PaperBallot;
+import Model.Pen;
+
 import java.util.concurrent.Semaphore;
 
 public class Voter extends Thread{

@@ -1,3 +1,9 @@
+import Controller.Voter;
+import Model.Booth;
+import Model.PaperBallot;
+import Model.Party;
+import Model.Pen;
+
 import java.util.concurrent.Semaphore;
 
 public class Main {
@@ -10,12 +16,14 @@ public class Main {
         Semaphore totalScoreSem = new Semaphore(1);
         Pen[] pens = new Pen[10];
         Booth[] booths = new Booth[10];
-        PaperBallot paperBallot = new PaperBallot();
-        // Create thread instances T1 &amp;amp;amp; T2
-        //T1=&amp;amp;gt; Increments the count; T2=&amp;amp;gt; Decrements the count
-//        Voter bob = new Voter("Bob", sem1, sem2, paperBallot, pens, booth);
-//        Voter alice = new Voter("Alice", sem1, sem2, paperBallot, pens, booth);
-        Voter[] voters = new Voter[1000000];
+        Voter[] voters = new Voter[1000];
+        Party[] parties = {new Party("Socialdemotrakiet"),
+                new Party("Venstre"),
+                new Party("Fremskridtspartiet"),
+                new Party("Enhedslisten"),
+                new Party("Liberal Alliance")};
+
+        PaperBallot[] paperBallots = new PaperBallot[voters.length];
 
         //create pens
         for (int i = 0; i < pens.length; i++) {
@@ -27,19 +35,21 @@ public class Main {
             booths[i] = new Booth();
         }
 
+        //create paper ballots
+        for (int i = 0; i < paperBallots.length; i++) {
+            paperBallots[i] = new PaperBallot();
+        }
 
         for (int i = 0; i < voters.length; i++) {
-            voters[i] = new Voter("default", i, sem1, sem2, totalScoreSem, paperBallot, pens, booths);
+            voters[i] = new Voter("default", i, sem1, sem2, totalScoreSem, paperBallots[i], pens, booths);
         }
 
         for (int i = 0; i < voters.length; i++) {
             voters[i].start();
         }
-//        // start T1 &amp;amp;amp; T2
-//        bob.start();
-//        alice.start();
-//        // Wait T1 &amp;amp;amp; T2
-//        bob.join();
-//        alice.join();
+
+        for (int i = 0; i < voters.length; i++) {
+            voters[i].join();
+        }
     }
 }

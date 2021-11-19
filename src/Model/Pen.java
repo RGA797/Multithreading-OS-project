@@ -1,3 +1,5 @@
+package Model;
+
 public class Pen {
     private boolean inUse = false;
     private int length = 10;

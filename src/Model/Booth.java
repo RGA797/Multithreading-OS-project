@@ -1,3 +1,5 @@
+package Model;
+
 public class Booth {
 
     public boolean occupied = false;

@@ -91,7 +91,6 @@ public class Voter extends Thread{
         myBooth.leave();
     }
 
-
     public Pen findAvailablePen() {
         for (int i = 0; i < pens.length; i++) {
             if (!(pens[i].isInUse())) {

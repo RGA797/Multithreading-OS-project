@@ -35,7 +35,14 @@ public class VoteCounter extends Thread {
                 party.incrementVotes();
                 sem.release();
                 sleep(5);
+
+                int luckyBreakNumber = 9;
+                if ((int) (Math.random()*10)  == luckyBreakNumber){
+                    sem.release();
+                    break;
+                }
             }
+
             //worker takes a rest
         }
             catch (InterruptedException e) {

@@ -27,16 +27,16 @@ public class VoteCounter extends Thread {
             while (!(paperBallots.size() == 0)) {
                 sem.acquire();
                 if (paperBallots.size() == 0){
+                    sem.release();
                     break;
                 }
                 paperBallot = paperBallots.remove((int) (Math.random() * paperBallots.size()));
                 party = parties.get(paperBallot.getChosenParty());
                 party.incrementVotes();
                 sem.release();
+                sleep(5);
             }
-            sem.release();
             //worker takes a rest
-            sleep(5);
         }
             catch (InterruptedException e) {
                 e.printStackTrace();

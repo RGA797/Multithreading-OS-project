@@ -24,11 +24,15 @@ public class VoteCounter extends Thread {
         Party party;
         PaperBallot paperBallot;
         try {
-            sem.acquire();
             while (!(paperBallots.size() == 0)) {
+                sem.acquire();
+                if (paperBallots.size() == 0){
+                    break;
+                }
                 paperBallot = paperBallots.remove((int) (Math.random() * paperBallots.size()));
                 party = parties.get(paperBallot.getChosenParty());
                 party.incrementVotes();
+                sem.release();
             }
             sem.release();
             //worker takes a rest

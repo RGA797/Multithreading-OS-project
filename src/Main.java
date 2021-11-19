@@ -17,6 +17,7 @@ public class Main {
         //create Semaphore=&amp;amp;gt; #permits = 1
         Semaphore sem1 = new Semaphore(10);
         Semaphore sem2 = new Semaphore(10);
+        Semaphore sem3 = new Semaphore(1);
         Semaphore totalScoreSem = new Semaphore(1);
         Pen[] pens = new Pen[10];
         Booth[] booths = new Booth[10];
@@ -25,13 +26,12 @@ public class Main {
         HashMap<String, Party> parties = new HashMap<>();
 
         List<PaperBallot> paperBallots = new Vector<>();
-
         //create parties and add to hashmap
         parties.put("Socialdemokratiet", new Party("Socialdemokratiet"));
         parties.put("Venstre", new Party("Venstre"));
         parties.put("Fremskridtspartiet", new Party("Fremskridtspartiet"));
         parties.put("Enhedslisten", new Party("Enhedslisten"));
-        parties.put("Liberal ALliance", new Party("Liberal ALliance"));
+        parties.put("Liberal Alliance", new Party("Liberal ALliance"));
 
         //create pens
         for (int i = 0; i < pens.length; i++) {
@@ -60,7 +60,7 @@ public class Main {
 
         //create vote counters
         for (int i = 0; i < voteCounters.length; i++) {
-            voteCounters[i] = new VoteCounter(paperBallots, parties);
+            voteCounters[i] = new VoteCounter(paperBallots, parties, sem3);
         }
 
         //wait for all voters to finish

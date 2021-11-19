@@ -3,7 +3,7 @@ package Model;
 public class PaperBallot {
     private String chosenParty = "";
 
-    private String[] parties = {"Socialdemoktratiet", "Venstre", "Fremskridtspartiet", "Enhedslisten", "Liberal Alliance"};
+    private String[] parties = {"Socialdemokratiet", "Venstre", "Fremskridtspartiet", "Enhedslisten", "Liberal Alliance"};
     private boolean used = false;
     private boolean counted = false;
 

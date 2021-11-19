@@ -1,7 +1,11 @@
 public class PaperBallot {
-    private boolean inUse = false;
+    private String chosenParty = "";
+    private String[] parties = {"Socialdemoktratiet", "Venstre", "Fremskridtspartiet", "Enhedslisten", "Liberal Alliance"};
+    private boolean used = false;
 
-    public void use() {
-        inUse = true;
+
+    public void choose(int index) {
+        chosenParty = parties[index];
+        used = true;
     }
 }

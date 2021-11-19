@@ -5,4 +5,12 @@ public class Booth {
     public void use() {
         occupied = true;
     }
+
+    public void leave() {
+        occupied = false;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
 }

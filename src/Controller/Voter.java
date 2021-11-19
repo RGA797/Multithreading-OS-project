@@ -85,8 +85,8 @@ public class Voter extends Thread{
         myPen.write();
         paperBallot.choose(chooseParty());
         //totalScoreSem.acquire();
-        TOTAL_VOTES++;
-        System.out.println("Total votes:" + TOTAL_VOTES);
+//        TOTAL_VOTES++;
+//        System.out.println("Total votes:" + TOTAL_VOTES);
         //totalScoreSem.release();
         myBooth.leave();
     }

@@ -7,6 +7,7 @@ import Model.Pen;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.Semaphore;
 
 public class Main {
@@ -21,12 +22,11 @@ public class Main {
         Booth[] booths = new Booth[10];
         Voter[] voters = new Voter[1000];
         VoteCounter[] voteCounters = new VoteCounter[10];
-        HashMap<String, Party> parties = null;
+        HashMap<String, Party> parties = new HashMap<>();
 
-        List<PaperBallot> paperBallots = null;
+        List<PaperBallot> paperBallots = new Vector<>();
 
         //create parties and add to hashmap
-        assert false;
         parties.put("Socialdemokratiet", new Party("Socialdemokratiet"));
         parties.put("Venstre", new Party("Venstre"));
         parties.put("Fremskridtspartiet", new Party("Fremskridtspartiet"));
@@ -44,7 +44,7 @@ public class Main {
         }
 
         //create paper ballots
-        for (int i = 0; i < paperBallots.size(); i++) {
+        for (int i = 0; i < voters.length; i++) {
             paperBallots.add(new PaperBallot());
         }
 
@@ -53,20 +53,35 @@ public class Main {
             voters[i] = new Voter("default", i, sem1, sem2, totalScoreSem, paperBallots.get(i), pens, booths);
         }
 
+        //start voters
+        for (Voter voter : voters) {
+            voter.start();
+        }
+
         //create vote counters
         for (int i = 0; i < voteCounters.length; i++) {
             voteCounters[i] = new VoteCounter(paperBallots, parties);
         }
 
-        //start voters
-        for (int i = 0; i < voters.length; i++) {
-            voters[i].start();
-        }
-
         //wait for all voters to finish
-        for (int i = 0; i < voters.length; i++) {
-            voters[i].join();
+        for (Voter voter : voters) {
+            voter.join();
         }
-    }
 
+        //start votecounters
+        for (VoteCounter voteCounter : voteCounters) {
+            voteCounter.start();
+        }
+
+        //wait for all votecounters to finish
+        for (VoteCounter voteCounter : voteCounters) {
+            voteCounter.join();
+        }
+
+        System.out.println("Socialdemoktratiet got " + parties.get("Socialdemokratiet").getVotes() + " votes");
+        System.out.println("Venstre got " + parties.get("Venstre").getVotes() + " votes");
+        System.out.println("Fremskridtspartiet got " + parties.get("Fremskridtspartiet").getVotes() + " votes");
+        System.out.println("Enhedslisten got " + parties.get("Enhedslisten").getVotes() + " votes");
+        System.out.println("Liberal Alliance got " + parties.get("Liberal Alliance").getVotes() + " votes");
+    }
 }
